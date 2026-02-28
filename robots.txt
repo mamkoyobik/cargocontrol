@@ -1,0 +1,5 @@
+User-agent: *
+Disallow:
+
+Host: cargocontrol.ru
+Sitemap: https://cargocontrol.ru/sitemap.xml

@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+SNAP="$ROOT/.backups/20260225-051057"
+cp -f "$SNAP/index.php" "$ROOT/index.php"
+cp -f "$SNAP/site-header.php" "$ROOT/site-header.php"
+cp -f "$SNAP/section-service-detail.php" "$ROOT/section-service-detail.php"
+cp -f "$SNAP/section-gallery.php" "$ROOT/section-gallery.php"
+cp -f "$SNAP/section-contact.php" "$ROOT/section-contact.php"
+cp -f "$SNAP/section-about.php" "$ROOT/section-about.php"
+cp -f "$SNAP/footer.php" "$ROOT/footer.php"
+cp -f "$SNAP/head.php" "$ROOT/head.php"
+cp -f "$SNAP/style.css" "$ROOT/style.css"
+cp -f "$SNAP/main.js" "$ROOT/js/main.js"
+echo "Restored snapshot 20260225-051057"
