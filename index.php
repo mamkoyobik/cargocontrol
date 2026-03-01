@@ -1,4 +1,8 @@
 <?php
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
+
 $activePage = 'home';
 $seoTitle = 'Грузовой сюрвейер в Санкт-Петербурге - CARGO CONTROL';
 $seoDescription = 'Независимый грузовой сюрвейер CARGO CONTROL: инспекции грузов в портах, на терминалах и складах СПб и ЛО, фотоотчет, контроль погрузки и защита от убытков. Работаем 24 часа ежедневно.';

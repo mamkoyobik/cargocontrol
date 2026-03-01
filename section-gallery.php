@@ -93,6 +93,9 @@ $galleryGroups = [
                                     decoding="async"
                                     src="<?php echo $group['folder']; ?>/<?php echo $i; ?>.jpg"
                                     alt="<?php echo $group['title']; ?>, фото <?php echo $i; ?>"
+                                    width="1200"
+                                    height="900"
+                                    sizes="(max-width: 767px) 100vw, (max-width: 991px) 50vw, 25vw"
                                 >
                             </a>
                         <?php } ?>
@@ -111,7 +114,15 @@ $galleryGroups = [
     </div>
 </section>
 
-<div id="ccLightbox" class="cc-lightbox" aria-hidden="true">
+<div
+    id="ccLightbox"
+    class="cc-lightbox"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Просмотр изображения"
+    aria-hidden="true"
+    tabindex="-1"
+>
     <button type="button" class="cc-lightbox-close" aria-label="Закрыть">&times;</button>
     <button type="button" class="cc-lightbox-nav cc-lightbox-prev" aria-label="Предыдущее изображение"></button>
     <img class="cc-lightbox-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="">
