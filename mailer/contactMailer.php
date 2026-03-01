@@ -27,6 +27,11 @@ class ContactMailer
         return (int)$value;
     }
 
+    private static function isValidEmail($value)
+    {
+        return filter_var((string)$value, FILTER_VALIDATE_EMAIL) !== false;
+    }
+
     public static function send($name, $company, $email, $phone, $message)
     {
         $name = str_replace(["\r", "\n"], ' ', trim((string)$name));
@@ -40,12 +45,28 @@ class ContactMailer
         $fromName = self::getEnv('MAIL_FROM_NAME', 'CARGO CONTROL');
         $smtpHost = self::getEnv('MAIL_HOST', 'smtp.jino.ru');
         $smtpUser = self::getEnv('MAIL_USERNAME', $fromEmail);
-        $smtpPass = self::getEnv('MAIL_PASSWORD', '123123');
+        $smtpPass = self::getEnv('MAIL_PASSWORD', '');
         $smtpPort = self::getEnvInt('MAIL_PORT', 587);
         $smtpEncryptionEnv = strtoupper(self::getEnv('MAIL_ENCRYPTION', 'STARTTLS'));
         $smtpEncryption = ($smtpEncryptionEnv === 'SSL' || $smtpEncryptionEnv === 'SMTPS')
             ? PHPMailer::ENCRYPTION_SMTPS
             : PHPMailer::ENCRYPTION_STARTTLS;
+
+        if (
+            $smtpHost === '' ||
+            $smtpUser === '' ||
+            $smtpPass === '' ||
+            !self::isValidEmail($fromEmail) ||
+            !self::isValidEmail($toEmail) ||
+            !self::isValidEmail($email)
+        ) {
+            error_log('ContactMailer misconfigured or invalid email payload.');
+            return false;
+        }
+
+        if ($smtpPort <= 0 || $smtpPort > 65535) {
+            $smtpPort = 587;
+        }
 
         $body = implode("\n", [
             'Имя: ' . $name,
@@ -71,14 +92,15 @@ class ContactMailer
             $mailer->CharSet = 'UTF-8';
             $mailer->setFrom($fromEmail, $fromName);
             $mailer->addAddress($toEmail);
+            $mailer->addReplyTo($email, $name !== '' ? $name : $email);
             $mailer->isHTML(false);
             $mailer->Subject = 'Заполнена форма обратной связи';
             $mailer->Body = $body;
 
             return $mailer->send();
         } catch (Exception $e) {
+            error_log('ContactMailer send failed: ' . $e->getMessage());
             return false;
         }
     }
 }
-

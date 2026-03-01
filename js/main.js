@@ -507,10 +507,40 @@
             if ($firstField.length) {
                 $firstField.focus();
             }
+
+            fitRecaptcha();
         });
 
         $modal.on("hidden.bs.modal", function () {
             $body.removeClass("cc-no-scroll");
+        });
+    }
+
+    function fitRecaptcha() {
+        var $widgets = $("#contactForm .g-recaptcha");
+        var baseWidth = 304;
+        var baseHeight = 78;
+
+        if (!$widgets.length) {
+            return;
+        }
+
+        $widgets.each(function () {
+            var $widget = $(this);
+            var $container = $widget.closest(".form-group");
+            var containerWidth = Math.floor($container.width() || $widget.parent().width() || baseWidth);
+            var scale = Math.min(1, containerWidth / baseWidth);
+
+            if (!isFinite(scale) || scale <= 0) {
+                scale = 1;
+            }
+
+            $widget.css({
+                width: baseWidth + "px",
+                transformOrigin: "left top",
+                transform: "scale(" + scale.toFixed(3) + ")",
+                minHeight: Math.ceil(baseHeight * scale) + "px"
+            });
         });
     }
 
@@ -525,6 +555,44 @@
             $form.validator();
         }
 
+        var $button = $("#button");
+        var $answer = $("#answer");
+        var $loader = $("#loader");
+        var buttonDefaultText = $.trim($button.text()) || "Отправить";
+        var buttonLoadingText = $.trim(String($button.data("loading-text") || "")) || "Отправляем...";
+
+        function trackFormEvent(eventName) {
+            if (
+                typeof yaCounter38639640 !== "undefined" &&
+                yaCounter38639640 &&
+                typeof yaCounter38639640.reachGoal === "function"
+            ) {
+                yaCounter38639640.reachGoal(eventName);
+            }
+
+            if (typeof window.ga === "function") {
+                window.ga("send", "event", "contact_form", eventName);
+            }
+        }
+
+        function setLoadingState(isLoading) {
+            if (isLoading) {
+                $button.prop("disabled", true).attr("aria-disabled", "true").text(buttonLoadingText);
+                $form.attr("aria-busy", "true");
+                $loader.stop(true, true).fadeIn(160);
+                return;
+            }
+
+            $button.prop("disabled", false).attr("aria-disabled", "false").text(buttonDefaultText);
+            $form.removeAttr("aria-busy");
+            $loader.stop(true, true).fadeOut(120);
+        }
+
+        function getRecaptchaResponseToken() {
+            var $tokenField = $form.find("textarea[name='g-recaptcha-response'], input[name='g-recaptcha-response']").first();
+            return $.trim(String(($tokenField.val() || "")));
+        }
+
         $form.on("submit", function (event) {
             if (event.isDefaultPrevented()) {
                 return;
@@ -532,37 +600,70 @@
 
             event.preventDefault();
 
-            var $button = $("#button");
-            var $answer = $("#answer");
-            var $loader = $("#loader");
+            if ($button.prop("disabled")) {
+                return;
+            }
+
+            if ($form.find(".g-recaptcha").length && getRecaptchaResponseToken() === "") {
+                $answer.html("<div class='answer'><h4>Подтвердите, что вы не робот.</h4></div>");
+                trackFormEvent("form_captcha_missing");
+                return;
+            }
+
+            trackFormEvent("form_attempt");
 
             $.ajax({
                 url: "handler.php",
                 type: "POST",
                 data: $form.serialize(),
+                timeout: 20000,
                 beforeSend: function () {
                     $answer.empty();
-                    $button.prop("disabled", true).css("margin-bottom", "20px");
-                    $loader.fadeIn(160);
+                    setLoadingState(true);
                 },
                 success: function (result) {
-                    $loader.fadeOut(180, function () {
+                    var isSuccess = /Ваше сообщение отправлено/i.test(String(result));
+
+                    $loader.stop(true, true).fadeOut(180, function () {
                         $answer.html(result);
                     });
 
-                    $form.find("input[type='text'], input[type='email'], textarea").val("");
-
-                    if (typeof grecaptcha !== "undefined") {
-                        grecaptcha.reset();
+                    if (isSuccess) {
+                        $form
+                            .find("input[name='name'], input[name='company'], input[name='phone'], input[name='email'], textarea[name='message']")
+                            .val("");
+                        trackFormEvent("form_success");
+                    } else {
+                        trackFormEvent("form_validation_error");
                     }
 
-                    $button.prop("disabled", false);
+                    if (isSuccess && typeof grecaptcha !== "undefined" && typeof grecaptcha.reset === "function") {
+                        grecaptcha.reset();
+                    }
                 },
-                error: function () {
-                    $loader.fadeOut(180, function () {
-                        $answer.html("<div class='answer'><h4>Произошла ошибка! Попробуйте позже.</h4></div>");
+                error: function (xhr, textStatus) {
+                    var fallbackHtml = "<div class='answer'><h4>Произошла ошибка! Попробуйте позже.</h4></div>";
+
+                    if (xhr && xhr.status === 429) {
+                        fallbackHtml = "<div class='answer'><h4>Слишком много запросов. Повторите попытку через несколько минут.</h4></div>";
+                    }
+
+                    $loader.stop(true, true).fadeOut(180, function () {
+                        if (xhr && typeof xhr.responseText === "string" && xhr.responseText.indexOf("class=\"answer\"") !== -1) {
+                            $answer.html(xhr.responseText);
+                            return;
+                        }
+                        $answer.html(fallbackHtml);
                     });
-                    $button.prop("disabled", false);
+
+                    if (textStatus === "timeout") {
+                        trackFormEvent("form_timeout");
+                    } else {
+                        trackFormEvent("form_error");
+                    }
+                },
+                complete: function () {
+                    setLoadingState(false);
                 }
             });
         });
@@ -613,14 +714,6 @@
         }
     }
 
-    window.verifyRecaptchaCallback = function () {
-        return true;
-    };
-
-    window.expiredRecaptchaCallback = function () {
-        return true;
-    };
-
     $(function () {
         syncHeaderHeight();
         setHeaderCompactState();
@@ -629,6 +722,7 @@
         $window.on("resize orientationchange load", function () {
             syncHeaderHeight();
             scheduleScrollBoundUpdates();
+            fitRecaptcha();
         });
 
         $window.on("scroll", scheduleScrollBoundUpdates);
@@ -643,6 +737,7 @@
         setupBootstrapModal();
         setupContactForm();
         setupRevealAnimations();
+        fitRecaptcha();
 
         setTimeout(function () {
             syncHeaderHeight();

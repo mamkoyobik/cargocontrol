@@ -5,9 +5,17 @@ RewriteCond %{HTTPS} !=on [OR]
 RewriteCond %{HTTP_HOST} ^www\.cargocontrol\.ru$ [NC]
 RewriteRule ^ https://cargocontrol.ru%{REQUEST_URI} [L,R=301]
 
+# Deny hidden files (except .well-known for ACME, etc.)
+RewriteRule "(^|/)\.(?!well-known/)" - [F,L]
+
 # Redirect legacy duplicate pages to the main landing page
 RewriteRule ^(about|contact|gallery|service)\.php$ https://cargocontrol.ru/ [L,R=301,NC]
 RewriteRule ^service-(cargo|cargos|cargoy|legal|temp)\.php$ https://cargocontrol.ru/ [L,R=301,NC]
+
+# Block direct web access to backup and helper scripts
+RewriteRule ^\.backups/ - [F,L,NC]
+RewriteRule ^mailer/PHPMailer/get_oauth_token\.php$ - [F,L,NC]
+RewriteRule ^recaptcha-master/(examples|tests)/ - [F,L,NC]
 
 # Compression for text resources
 <IfModule mod_deflate.c>
@@ -56,7 +64,11 @@ RewriteRule ^service-(cargo|cargos|cargoy|legal|temp)\.php$ https://cargocontrol
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
     Header always set X-Frame-Options "SAMEORIGIN"
     Header always set X-XSS-Protection "1; mode=block"
+    Header always set Strict-Transport-Security "max-age=31536000"
+    Header always set Cross-Origin-Resource-Policy "same-origin"
+    Header always set X-Permitted-Cross-Domain-Policies "none"
     Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+    Header always set Content-Security-Policy "default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; frame-ancestors 'self'; script-src 'self' 'unsafe-inline' https://www.google.com https://www.gstatic.com https://mc.yandex.ru https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://mc.yandex.ru https://www.google-analytics.com; font-src 'self' data:; connect-src 'self' https://mc.yandex.ru https://www.google-analytics.com; frame-src https://www.google.com https://www.gstatic.com"
 </IfModule>
 
 FileETag None
