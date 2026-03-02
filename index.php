@@ -30,9 +30,7 @@ $seoImageHeight = 630;
     <section id="land" class="cc-hero" aria-labelledby="hero-heading">
         <div class="container">
             <div class="cc-hero-inner">
-                <p class="cc-hero-eyebrow">CARGO CONTROL | Санкт-Петербург и регионы РФ</p>
-                <h1 id="hero-heading" class="cc-hero-title">Независимый контроль грузов без потерь и спорных ситуаций</h1>
-                <p class="cc-hero-lead">Оперативно выезжаем в порты, на терминалы и склады, фиксируем риски и готовим доказательную базу для защиты ваших интересов.</p>
+                <h1 id="hero-heading" class="cc-hero-title">Независимый грузовой сюрвейер CARGO CONTROL</h1>
                 <img
                     class="cc-hero-mark"
                     src="img/logo-white.png"
@@ -47,24 +45,10 @@ $seoImageHeight = 630;
                     <button type="button" class="cc-btn cc-btn-primary btn-modal" data-toggle="modal" data-target="#contactForm_modal" data-cta="hero_request">Отправить заявку</button>
                 </div>
                 <ul class="cc-hero-facts" aria-label="Ключевая информация">
-                    <li>Более 15 лет практики</li>
+                    <li>Более 15 лет</li>
                     <li>Ежедневно, 24 часа</li>
-                    <li>СПб, ЛО, Москва и регионы РФ</li>
+                    <li>Санкт-Петербург, Ленинградская область, Москва и регионы РФ</li>
                 </ul>
-                <div class="cc-hero-proof" aria-label="Преимущества CARGO CONTROL">
-                    <article class="cc-hero-proof-item">
-                        <p class="cc-hero-proof-value">24/7</p>
-                        <p class="cc-hero-proof-text">Экстренный выезд на объект и подключение к инспекции в день обращения.</p>
-                    </article>
-                    <article class="cc-hero-proof-item">
-                        <p class="cc-hero-proof-value">Фото + видео</p>
-                        <p class="cc-hero-proof-text">Детальная фиксация состояния груза для отчетов и урегулирования споров.</p>
-                    </article>
-                    <article class="cc-hero-proof-item">
-                        <p class="cc-hero-proof-value">Независимость</p>
-                        <p class="cc-hero-proof-text">Объективная оценка как основа для переговоров, страховых и судебных кейсов.</p>
-                    </article>
-                </div>
             </div>
         </div>
     </section>
