@@ -13,6 +13,8 @@ $seoImageHeight = isset($seoImageHeight) ? (int)$seoImageHeight : 630;
 
 $googleVerification = getenv('GOOGLE_SITE_VERIFICATION');
 $yandexVerification = getenv('YANDEX_VERIFICATION');
+$redesignCssPath = __DIR__ . '/style-redesign.css';
+$redesignCssVersion = is_file($redesignCssPath) ? (string)filemtime($redesignCssPath) : '1';
 
 $faqEntities = [
     [
@@ -209,7 +211,7 @@ $schema = [
 <link rel="stylesheet" href="css/bootstrap.min.css">
 <link rel="stylesheet" href="css/fonts.css">
 <link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="style-redesign.css?v=20260225b">
+<link rel="stylesheet" href="style-redesign.css?v=<?php echo rawurlencode($redesignCssVersion); ?>">
 
 <link rel="preconnect" href="https://www.google.com" crossorigin>
 <link rel="preconnect" href="https://www.gstatic.com" crossorigin>

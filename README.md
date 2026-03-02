@@ -30,6 +30,7 @@ Set these variables on the server (Apache/Nginx/PHP-FPM environment):
 - Origin/Referer host check (same-host only).
 - Rate limit: 5 requests per 10 minutes per IP.
 - Server-side validation for required fields, email, phone, and reCAPTCHA.
+- Session cookies are configured as `HttpOnly`, `SameSite=Lax` and `Secure` on HTTPS via `session-bootstrap.php`.
 - If `RECAPTCHA_SITE_KEY` is missing, submit is disabled in UI with a clear status message.
 
 ## Quick checks
@@ -37,4 +38,28 @@ Set these variables on the server (Apache/Nginx/PHP-FPM environment):
 ```bash
 php -l *.php
 php -l mailer/contactMailer.php
+node --check js/main.js
+PORT=18100 ./scripts/regression.sh
 ```
+
+## UI structure
+
+- Base styles: `style.css`.
+- Redesign overrides: `style-redesign.css`.
+- `head.php` and `footer-libraries.php` append filemtime-based version query params for CSS/JS cache busting.
+- Current conversion layer is consolidated in `style-redesign.css` as `v10 unified conversion layer`.
+- Main section templates:
+  - `index.php` (hero)
+  - `section-service-detail.php` (services + CTA)
+  - `section-gallery.php` (gallery + CTA)
+  - `section-contact.php` (contacts + CTA)
+  - `section-about.php` (about + trust metrics)
+  - `footer.php` (footer CTA + trust)
+
+## CTA analytics
+
+- CTA click tracking is centralized in `js/main.js` (`setupCtaTracking` and `trackAnalyticsEvent`).
+- Use `data-cta="event_name"` on CTA buttons/links to send:
+  - GA event: category `cta`, action `event_name`
+  - Yandex goal: `cta_event_name`
+- Contact form events keep category `contact_form` and existing Yandex goals.

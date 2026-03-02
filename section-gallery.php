@@ -48,7 +48,13 @@ $galleryGroups = [
     <div class="container">
         <header class="section_header text-center">
             <h2><strong>Фото</strong>галерея</h2>
+            <p class="cc-gallery-lead">Реальные инспекции CARGO CONTROL: перегрузка, досмотры, фиксация повреждений и контроль операций на терминалах.</p>
         </header>
+        <ul class="cc-gallery-highlights" aria-label="Что фиксирует фотогалерея">
+            <li>Погрузка и выгрузка под контролем сюрвейера</li>
+            <li>Документирование состояния груза и упаковки</li>
+            <li>Фотофиксация для отчета и претензионной работы</li>
+        </ul>
 
         <div class="cc-gallery-tabs" role="tablist" aria-label="Фотогалерея">
             <?php foreach ($galleryGroups as $index => $group) { ?>
@@ -78,6 +84,7 @@ $galleryGroups = [
                     <?php echo $isActive ? '' : 'hidden'; ?>
                 >
                     <h3><?php echo $group['title']; ?></h3>
+                    <p class="cc-gallery-panel-note">Нажмите на фото, чтобы открыть увеличенный просмотр и детально оценить состояние груза.</p>
                     <div class="cc-gallery-grid">
                         <?php for ($i = 1; $i < 7; $i++) { ?>
                             <?php $isExtraImage = $i > 4; ?>
@@ -108,6 +115,10 @@ $galleryGroups = [
                     >
                         Показать все фото
                     </button>
+                    <aside class="cc-gallery-cta" aria-label="Переход к заявке">
+                        <p class="cc-gallery-cta-text">Нужна инспекция по похожему сценарию? Подготовим план контроля под ваш маршрут и тип груза.</p>
+                        <button type="button" class="cc-btn cc-btn-primary btn-modal" data-toggle="modal" data-target="#contactForm_modal" data-cta="gallery_request">Запросить инспекцию</button>
+                    </aside>
                 </section>
             <?php } ?>
         </div>
