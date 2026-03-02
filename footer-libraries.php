@@ -1,10 +1,14 @@
+<?php
+$mainJsPath = __DIR__ . '/js/main.js';
+$mainJsVersion = is_file($mainJsPath) ? (string)filemtime($mainJsPath) : '1';
+?>
 <!-- libraries -->
 <script src="js/vendor/jquery-1.11.1.min.js"></script>
 <script src="js/vendor/bootstrap.min.js"></script>
 <script src="js/validator.js"></script>
 
 <!-- custom scripts -->
-<script src="js/main.js"></script>
+<script src="js/main.js?v=<?php echo rawurlencode($mainJsVersion); ?>"></script>
 
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript">

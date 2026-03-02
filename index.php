@@ -1,7 +1,5 @@
 <?php
-if (session_status() !== PHP_SESSION_ACTIVE) {
-    session_start();
-}
+require_once __DIR__ . '/session-bootstrap.php';
 
 $activePage = 'home';
 $seoTitle = 'Грузовой сюрвейер в Санкт-Петербурге - CARGO CONTROL';
@@ -24,7 +22,7 @@ $seoImageHeight = 630;
     <?php include_once('head.php'); ?>
 </head>
 <body>
-<a class="cc-skip-link" href="#services">Перейти к основному содержанию</a>
+<a class="cc-skip-link" href="#main-content">Перейти к основному содержанию</a>
 
 <div id="box_wrapper">
     <?php include_once('site-header.php'); ?>
@@ -32,8 +30,11 @@ $seoImageHeight = 630;
     <section id="land" class="cc-hero" aria-labelledby="hero-heading">
         <div class="container">
             <div class="cc-hero-inner">
-                <h1 id="hero-heading" class="sr-only">Независимый грузовой сюрвейер CARGO CONTROL в Санкт-Петербурге</h1>
+                <p class="cc-hero-eyebrow">CARGO CONTROL | Санкт-Петербург и регионы РФ</p>
+                <h1 id="hero-heading" class="cc-hero-title">Независимый контроль грузов без потерь и спорных ситуаций</h1>
+                <p class="cc-hero-lead">Оперативно выезжаем в порты, на терминалы и склады, фиксируем риски и готовим доказательную базу для защиты ваших интересов.</p>
                 <img
+                    class="cc-hero-mark"
                     src="img/logo-white.png"
                     alt="Независимый грузовой сюрвейер - контроль сохранности грузов"
                     width="949"
@@ -42,14 +43,28 @@ $seoImageHeight = 630;
                     decoding="async"
                 >
                 <div class="cc-hero-actions">
-                    <a href="#services" class="cc-btn cc-btn-secondary">Услуги</a>
-                    <button type="button" class="cc-btn cc-btn-primary btn-modal" data-toggle="modal" data-target="#contactForm_modal">Отправить заявку</button>
+                    <a href="#services" class="cc-btn cc-btn-secondary" data-cta="hero_services">Услуги</a>
+                    <button type="button" class="cc-btn cc-btn-primary btn-modal" data-toggle="modal" data-target="#contactForm_modal" data-cta="hero_request">Отправить заявку</button>
                 </div>
                 <ul class="cc-hero-facts" aria-label="Ключевая информация">
-                    <li>Более 15 лет</li>
+                    <li>Более 15 лет практики</li>
                     <li>Ежедневно, 24 часа</li>
-                    <li>Санкт-Петербург, Ленинградская область, Москва и регионы РФ</li>
+                    <li>СПб, ЛО, Москва и регионы РФ</li>
                 </ul>
+                <div class="cc-hero-proof" aria-label="Преимущества CARGO CONTROL">
+                    <article class="cc-hero-proof-item">
+                        <p class="cc-hero-proof-value">24/7</p>
+                        <p class="cc-hero-proof-text">Экстренный выезд на объект и подключение к инспекции в день обращения.</p>
+                    </article>
+                    <article class="cc-hero-proof-item">
+                        <p class="cc-hero-proof-value">Фото + видео</p>
+                        <p class="cc-hero-proof-text">Детальная фиксация состояния груза для отчетов и урегулирования споров.</p>
+                    </article>
+                    <article class="cc-hero-proof-item">
+                        <p class="cc-hero-proof-value">Независимость</p>
+                        <p class="cc-hero-proof-text">Объективная оценка как основа для переговоров, страховых и судебных кейсов.</p>
+                    </article>
+                </div>
             </div>
         </div>
     </section>

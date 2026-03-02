@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/mailer/contactMailer.php';
 require_once __DIR__ . '/recaptcha-master/src/autoload.php';
+require_once __DIR__ . '/session-bootstrap.php';
 
 header('Content-Type: text/html; charset=UTF-8');
 header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
@@ -113,10 +114,6 @@ function isRateLimited($ip, $limit = 5, $windowSeconds = 600)
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     renderAnswer('Метод запроса не поддерживается.', 'h4', 405);
-}
-
-if (session_status() !== PHP_SESSION_ACTIVE) {
-    session_start();
 }
 
 if (!isAllowedOrigin()) {

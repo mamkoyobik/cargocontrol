@@ -1,7 +1,5 @@
 <?php
-if (session_status() !== PHP_SESSION_ACTIVE && !headers_sent()) {
-    session_start();
-}
+require_once __DIR__ . '/session-bootstrap.php';
 
 $formToken = $_SESSION['cc_form_token'] ?? '';
 if (!is_string($formToken) || strlen($formToken) < 32) {

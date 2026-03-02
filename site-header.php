@@ -28,13 +28,13 @@ if (!isset($activePage)) {
                             <li<?php echo $activePage === 'services' ? ' class="active"' : ''; ?>><a href="#services">Услуги</a></li>
                             <li<?php echo $activePage === 'gallery' ? ' class="active"' : ''; ?>><a href="#gallery">Фотогалерея</a></li>
                             <li<?php echo $activePage === 'contact' ? ' class="active"' : ''; ?>><a href="#contacts">Контакты</a></li>
-                            <li<?php echo $activePage === 'about' ? ' class="active"' : ''; ?>><a href="#about">о нас</a></li>
+                            <li<?php echo $activePage === 'about' ? ' class="active"' : ''; ?>><a href="#about">О нас</a></li>
                         </ul>
                     </nav>
                     <div class="cc-header-meta">
-                        <a class="cc-header-phone" href="tel:+78129213074">+7 (812) 921-30-74</a>
+                        <a class="cc-header-phone" href="tel:+78129213074" data-cta="header_phone">+7 (812) 921-30-74</a>
                         <span class="cc-header-hours">Ежедневно, 24 часа!</span>
-                        <button type="button" class="cc-header-action btn-modal" data-toggle="modal" data-target="#contactForm_modal">Отправить заявку</button>
+                        <button type="button" class="cc-header-action btn-modal" data-toggle="modal" data-target="#contactForm_modal" data-cta="header_request">Отправить заявку</button>
                     </div>
                 </div>
             </div>

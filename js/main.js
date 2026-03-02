@@ -77,6 +77,48 @@
         }
     }
 
+    function trackAnalyticsEvent(category, eventName, yandexGoal) {
+        var safeCategory = String(category || "interaction");
+        var safeEventName = String(eventName || "unknown");
+        var safeGoal = String(yandexGoal || "");
+
+        if (
+            safeGoal !== "" &&
+            typeof yaCounter38639640 !== "undefined" &&
+            yaCounter38639640 &&
+            typeof yaCounter38639640.reachGoal === "function"
+        ) {
+            yaCounter38639640.reachGoal(safeGoal);
+        }
+
+        if (typeof window.ga === "function") {
+            window.ga("send", "event", safeCategory, safeEventName);
+        }
+    }
+
+    function normalizeEventName(value) {
+        return String(value || "")
+            .toLowerCase()
+            .replace(/[^a-z0-9_]+/g, "_")
+            .replace(/^_+|_+$/g, "")
+            .slice(0, 64);
+    }
+
+    function setupCtaTracking() {
+        $document.on("click", "[data-cta]", function () {
+            var eventName = normalizeEventName($(this).attr("data-cta")) || "cta_click";
+            trackAnalyticsEvent("cta", eventName, "cta_" + eventName);
+        });
+
+        $document.on("click", "a[href^='tel:']:not([data-cta])", function () {
+            trackAnalyticsEvent("cta", "phone_click", "cta_phone_click");
+        });
+
+        $document.on("click", "a[href^='mailto:']:not([data-cta])", function () {
+            trackAnalyticsEvent("cta", "email_click", "cta_email_click");
+        });
+    }
+
     function closeMobileMenu() {
         $header.removeClass("mobile-active");
         $menuToggle.attr("aria-expanded", "false");
@@ -562,17 +604,7 @@
         var buttonLoadingText = $.trim(String($button.data("loading-text") || "")) || "Отправляем...";
 
         function trackFormEvent(eventName) {
-            if (
-                typeof yaCounter38639640 !== "undefined" &&
-                yaCounter38639640 &&
-                typeof yaCounter38639640.reachGoal === "function"
-            ) {
-                yaCounter38639640.reachGoal(eventName);
-            }
-
-            if (typeof window.ga === "function") {
-                window.ga("send", "event", "contact_form", eventName);
-            }
+            trackAnalyticsEvent("contact_form", eventName, eventName);
         }
 
         function setLoadingState(isLoading) {
@@ -735,6 +767,7 @@
         setupGalleryExpansion();
         setupGalleryLightbox();
         setupBootstrapModal();
+        setupCtaTracking();
         setupContactForm();
         setupRevealAnimations();
         fitRecaptcha();

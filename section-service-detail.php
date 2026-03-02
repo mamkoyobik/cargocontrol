@@ -59,6 +59,12 @@
                     <p>CARGO CONTROL успешно работает на рынке более 15 лет, поэтому наш опыт позволяет гарантировать максимальную защиту Ваших интересов. Мы всегда учитываем индивидуальные потребности заказчика, гарантируем своевременность и качественное выполнение услуг. <a href="#contacts">Свяжитесь</a> с нашими специалистами, и мы подробно проконсультируем Вас по интересующим вопросам.</p>
                 </details>
             </div>
+
+            <aside class="cc-services-cta" aria-label="Быстрая консультация">
+                <p class="cc-services-cta-title">Нужно срочно проверить груз?</p>
+                <p class="cc-services-cta-text">Оставьте заявку, и мы подготовим план инспекции с перечнем контрольных точек под ваш кейс.</p>
+                <button type="button" class="cc-btn cc-btn-primary btn-modal" data-toggle="modal" data-target="#contactForm_modal" data-cta="services_consult">Получить консультацию</button>
+            </aside>
         </article>
     </div>
 </section>
